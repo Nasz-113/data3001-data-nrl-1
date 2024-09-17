@@ -6,7 +6,6 @@ pd.set_option('display.max_columns',200)
 
 nrlData20_23 = pd.read_csv('D:/NRL Data/OneDrive_2023-09-05/UNSW Data/2020-2023 Event Data.csv')
 playersdf = pd.read_csv('D:/NRL Data/OneDrive_2023-09-05/UNSW Data/Players.csv')
-# print(nrlData20_23.head())
 
 # print("DUPLICATED NRL20-23\n") # To inspect how many duplicated values
 # print(nrlData20_23.duplicated().sum())
@@ -59,32 +58,8 @@ merged_nrl20_23.drop(columns=['PlayerId_InPossession','InPossessionPlayerId','Pl
 # print(merged_nrl20_23.head(5))
 # print(merged_nrl20_23.columns)
 
-# print(f'col23: {col23}')
-# print(f'col21: {col21}')
-# print(f'columns 55 and 57: {col[55]} {col[57]}')
-
-# nrlData20_23PTB = nrlData20_23[nrlData20_23["EventCode"].isin(ptbEvent)]
-# print(nrlData20_23.shape)
-# print(nrlData20_23.isnull().sum().to_string())
-
-merged_nrl20_23 = merged_nrl20_23[~merged_nrl20_23['Club Name'].isna()].copy()
-print(merged_nrl20_23.shape)
-print(merged_nrl20_23.isnull().sum().to_string())
+# merged_nrl20_23 = merged_nrl20_23[~merged_nrl20_23['Club Name'].isna()].copy()
+# print(merged_nrl20_23.shape)
+# print(merged_nrl20_23.isnull().sum().to_string())
 # print(merged_nrl20_23.head())
 # merged_nrl20_23.to_csv('merged.csv', index=False, header=True)
-
-
-# PTB Event Data
-
-# PBFD	PTB by opp - fast
-# PBFS	PTB - fast
-# PBHD	PTB by opp - handed over
-# PBHS	PTB - hands over
-# PBID	PTB by opp - interrupted
-# PBIS	PTB - interrupted
-# PBND	PTB by opp - neutral
-# PBNS	PTB - neutral
-# PBSD	PTB by opp - slow
-# PBSS	PTB - slow
-
-# ptbEvent = ['PBFD','PBFS','PBHD','PBHS','PBID','PBIS','PBND','PBNS','PBSD','PBSS']
