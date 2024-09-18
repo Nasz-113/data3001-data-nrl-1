@@ -5,9 +5,8 @@
 Objective:
 
 These are some of the proposed objectives:
-1. Based on the overall team position(location) when the ruck infringement(penalty) happened, could we identify the stronger/weaker team?
-2. Determine the players best position based on their BMI (weight and height), ball speed they create, and if they score a point
-3. Predict total infringement in a game for a team and what are the main factors influencing it?
+1. Predict total infringement in a game for a team and what are the main factors influencing it?
+2. 
 
 <!-- The objective of this project is to develop a data product that captures detailed match and player-level data from the NRL Women's Elite competition, suitable for use in predictive modeling and statistical analysis. The data will be organized into a structured dataframe ready for use by analysts, researchers, and other interested parties for tasks such as performance evaluation, player comparison, and match outcome prediction. -->
 
@@ -32,8 +31,16 @@ Workflow:
 1. Data Extraction: The event, match and player data will be extracted from the NRL 2020-2023 database
 2. Data Cleaning: 
 <!-- Data will be cleaned to ensure consistency across variables (e.g., ensuring player names are standardized, filling missing data, handling outliers). -->
+- Kalman Filter for Time Series Data
+- Handling Null Data (using Mean/Mode)
+- Normalization of the column using StandardScaler whenever we're using distance based machine learning algorithms (linear)
+- Log Transformations/Box Cox Transformation (for skewed data) => plot the columns 
+- Look at the Correlation Matrix => Look at Pearson Correlation and make sure to do Kendall Taul Correlation when doing 
+- EDA: Look at clusters created
+- 
 3. Feature Engineering: 
 <!-- We will create new variables based on the locational and event data. This might include distance covered, average possession time, scoring zones, etc. -->
+
 4. Data Validation: 
 <!-- Perform exploratory data analysis (EDA) and use visualizations to confirm the accuracy and completeness of the data. -->
 5. Final Product: 
