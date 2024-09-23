@@ -5,7 +5,7 @@
 
 The project aims to create two key predictive models: Win Probability Added (WPA) and Expected Points Added (EPA). These metrics, commonly used in sports analytics, will be calculated for each team and player during NRL matches. WPA evaluates how individual game actions, such as scoring or conceding penalties, shift a team's probability of winning. EPA, on the other hand, measures how specific actions contribute to scoring potential, helping teams optimize high-leverage plays. 
  
-This project offers real-world benefits by providing actionable insights for NRL teams. Understanding ball speed and calculating WPA/EPA helps teams to refine offensive strategies, identifying when quick ball movement leads to scoring opportunities, and allow real-time decision-making based on key game actions.EPA quantifies individual contributions to scoring, and WPA highlights critical moments that influence win probability, helping teams improve performance. These metrics offer deeper game insights for fans, enriching the viewing experience with data-driven analysis of pivotal plays. 
+This project offers real-world benefits by providing actionable insights for NRL teams. Calculating WPA/EPA helps teams to refine offensive strategies, identifying when quick ball movement leads to scoring opportunities, and allow real-time decision-making based on key game actions.EPA quantifies individual contributions to scoring, and WPA highlights critical moments that influence win probability, helping teams improve performance. These metrics offer deeper game insights for fans, enriching the viewing experience with data-driven analysis of pivotal plays. 
 
 While WPA and EPA have been successfully applied in various sports such as American Football, a low amount of research has been conducted on expected points in the NRL. By modelling WPA and EPA for rugby league, we aim to build upon existing research and introduce a new analytical perspective to the sport. Relevant work can be found in the following sources: 
 
@@ -55,11 +55,13 @@ Each observation captures essential details such as the match ID, sequence ID, p
 
  
 
-#### WPA rows: 
+#### Number of observations: 
 
 Each observation (row) will represent a game state at a given moment, typically captured when an event (e.g., score change, possession switch) occurs in the match. The number of observations will depend on the number of matches and the number of events in each match. 
 
 The data product will consist of approximately 10,000 observations, each representing a unique event from NRL matches. Each row will include time-stamped data on specific plays, capturing ball movement dynamics and player attributes during key events (e.g., score changes, possession switches). 
+
+#### Features: 
 
 Match ID: Identifies the specific match. 
 
