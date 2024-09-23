@@ -1,78 +1,71 @@
-DRAFT ReadMe File
+# NRL WPA AND EPA CALCULATION
 
+## Project description:
+For each round of the league and every draw on each team, NRL provides in-depth analysis on detailed breakdowns of team performances and match draws, and continues evolving the sport by enhancing team strategies by proving its dedication to analytic views on the sport. Therefore, this in-depth data will be used in this project to address two critical objectives in sports analytics.
+This project aims to develop a model to calculate Win Probability Added (WPA) for each team and Expected Points Added (EPA) for each player during a game. By evaluating key actions and their impact on outcomes, the model will provide metrics to assess how each play affects a team's likelihood of winning or scoring. WPA quantifies how individual actions, such as scoring or penalties, influence win probability, while EPA predicts the scoring impact of specific plays, helping teams optimize strategies in critical moments.
+WPA and EPA are both a very interesting analysis that is widely used in multiple sports such as xG in Football or even WPA and EPA in American Football. Although some similar analysis has been done, it is still not widely used in the NRL. Therefore, we are focusing on modeling both WPA and EPA in each NRL game from 2020-2023 to show the significance of the analysis for the NRL, teams, players, and also the viewers. 
 
-Project description:
-
-This project focuses on analysing two key predictive models: Win Probability Added (WPA) and Expected Points Added (EPA). These metrics, commonly used in sports analytics, will be calculated for each team and player during NRL matches. WPA evaluates how individual game actions, such as scoring or conceding penalties, shift a team's probability of winning. EPA, on the other hand, measures how specific actions contribute to scoring potential, helping teams optimize high-leverage plays. 
-
-Significance:
-
-This project offers real-world benefits by providing actionable insights for NRL teams. Understanding the effect of events and calculating WPA/EPA helps teams to refine offensive strategies, identifying what tends to lead to scoring opportunities, and allow real-time decision-making based on key game actions.
-
-EPA quantifies individual contributions to scoring, and WPA highlights critical moments that influence win probability, helping teams improve performance. These metrics offer deeper game insights for fans, enriching the viewing experience with data-driven analysis of pivotal plays.
-
-Relevance to Previous Work:
-
-While WPA and EPA have been successfully applied in various sports such as American Football, a low amount of research has been conducted on expected points in the NRL. By modelling WPA and EPA for rugby league, we aim to build upon existing research and introduce a new analytical perspective to the sport. Relevant work can be found in the following sources:
+Some previous works that are related to WPA and EPA are in these links:
 https://www.rugbyleagueeyetest.com/2022/02/07/explainer-eye-test-expected-points-etxp-for-the-nrl/ 
 https://www.sfu.ca/~tswartz/papers/nrl.pdf 
 
-Additionally, a very insightful podcast on optimising rugby performance is the one below with Rugby Legend Sam Tomkins:
-https://www.youtube.com/watch?v=xt6FuKarlEc 
 
-Sources:
+## Sources:
 
-The primary source of data is the official 2020-2023 NRL database. This database includes comprehensive information on matches, players, teams, events, and venues. The data includes:
--	Event data: A detailed collection of events from each game (Start of game/half, Ruck Infringement, Try, etc) 
--	Match data: Results, Date, scores, teams, officials, weather, and venue information. Player data: Name, DOB, Position, Club, and Physical Attribute.
+The primary source of data is the official 2020-2023 NRL database. This database includes comprehensive information on matches, players, teams, events, and venues, with each row representing a single event. Key variables include MatchId, SeqNumber, and identifiers for Season, Series, Round, Venue, Club, Opposition, and Player. Time variables track the half of the game's elapsed time since kickoff, the number of times on the game clock in the current half, and the local kickoff time of the match.
+Events are further detailed by PossessingClubId, PossessingPlayerId, and information on the specific event such as Set number, Tackle number, and EventCode with its corresponding EventName. The file also includes data for points scored, current match score, and opposition score at the time of the event. Locational data includes both physical and normalized coordinates (relative to the player or team in possession) across the rugby field, broken down into Xm/YmPhysical, Zone, Channel, and Section coordinates. Additional time-based variables track total possession seconds for both teams, offering insights into ball control during the match.
 
-Workflow: Briefly outline the steps you plan to take to process the data
+## Workflow: 
+### 1. Data Collection
+The Events.csv and Players.csv files contain information about matches, players, teams, and events, with each row representing a specific event. Key data points include match identifiers, timestamps, player positions, physical attributes (height, weight, age), and event types (e.g., passes, tackles).
 
-WPA and EPA:
-1.	Data Collection: Extract event, match, and player data from the NRL 2020-2023 database.
-2.	Data Cleaning: Handle missing data, standardize formats, and remove outliers.
-3.	Feature Engineering: Create features like field position, game clock, score differential, and possession. Use the formulas:
--	WPA = Post-play Win Probability − Pre-play Win Probability
--	EPA = Expected Points After Event − Expected Points Before Event
-4.	Data Validation: Perform exploratory analysis (EDA) and apply transformations (normalization, log transformations, Kalman filters).
-5.	Modelling: Organize the data for modelling, split into training/testing sets, and use logistic regression to calculate WPA and EPA. Analyse the results to identify impactful plays.
+### 2. Data Cleaning
+Null handling: removing the rows of data with null values
+Standardizing data format
+Removing outliers
 
-Data description: 
+### 3. Feature Engineering
+Create Field Position, Game Clock, Score Differential, and Possession variable
+Calculate WPA: Post-play Win Probability - Pre-play Win Probability
+Calculate EPA: Expected Points After Event - Expected Points Before Event
+Create a binary variable for Win/Loss. 1 for win and 0 for loss
+Create State variables (snapshots of the game state for chosen significant events, such as tries, ruck infringements, and tackles)
 
-The dataset consists of approximately 4.6 million observations (rows), with each row representing a unique event or game state during an NRL match. These events could include possessions, tackles, passes, scoring attempts, and turnovers.
+### 4. Data Validation
+Perform exploratory data analysis (EDA) which are univariate analysis using histogram and box plot, bivariate analysis using barplot, pairplot and scatterplot, and multivariate analysis using heatmap. Also, perform normalization of the columns, log transformations/box cox transformation for skewed data and Kalman Filter for Time Series Data
 
-Each observation captures essential details such as the match ID, sequence ID, possession times, player actions, and physical attributes of players, among other metrics. The dataset covers every match from 2020 to 2023, ensuring a robust amount of data for building predictive models.
+### Data description: 
+The data product will consist of approximately 10,000 observations, each representing a unique event from NRL matches. Each row will include time-stamped data on specific plays, capturing ball movement dynamics and player attributes during key events (e.g., score changes, possession switches).
 
-Rows:
+Match ID: Identifies the specific match.
+Sequence ID: Ensures events are in chronological order.
+Team A ID / Team B ID: Identifies the competing teams.
+Win/Loss column
 
-Each observation (row) will represent a game state at a given moment, typically captured when an event (e.g., score change, possession switch) occurs in the match. The number of observations will depend on the number of matches and the number of events in each match.
-Guidance:
-1.	Feature Selection:
--	Focus on key features like possession time, score differential, field position, points, and game clock. These variables are critical for predicting WPA and EPA.
-2.	Feature Engineering:
--	Create new variables such as score difference, elapsed time, and ball speed (from X-coordinate movement and possession time). These will help model ball movement and event impact.
-3.	Normalization and Scaling:
--	Normalize continuous variables (e.g., possession time, player attributes) and apply transformations (e.g., log transformations) for skewed data. Use Kalman filters for smoothing time-series data.
-4.	Data Splitting:
--	Split data into training and testing sets by season, using earlier seasons (2020-2022) for training and the latest season (2023) for testing. Maintain event sequence integrity for accurate modelling.
-5.	WPA Modelling:
--	Use pre-play and post-play probabilities to calculate WPA, focusing on features related to possession, score difference, and game context.
-6.	EPA Modelling:
--	Predict EPA by evaluating features such as field position, player actions, and possession metrics, considering the timing and context of each event.
-7.	Physical Attributes & Ball Speed:
--	Use average player physical attributes (height, weight, age) to model team ball speed. Correlate these metrics with ball movement to predict the speed of new teams.
-Project status:
-Weekly tasks.csv 
-Modeling Team: refining the data and calculating WPA/EPA following guidelines. 
-The data product is currently in the earliest stages of development. The team is coordinating this development in an efficient way to ensure its completion by week 5.
+This will also include WPA Features of:
+Score Difference: Calculated as Team A Score - Team B Score.
+Time Remaining: Total minutes remaining derived from Elapsed Minutes, Elapsed Seconds, and Half.
 
+This will also include EPA Features of:
+Event Name: Type of event (e.g., tackle, try, pass).
+Possession Time: Total and opponent's possession time.
+Physical Coordinates: XmPhysical and YmPhysical for field position.
+Score Tracking: Current and opponent's scores.
+Elapsed Game Time: Includes Elapsed Minutes, Elapsed Seconds, and Half.
+Field Position: Normalized XmPhysical and YmPhysical based on field zones.
+Game Context: Score differential and game clock information.
+The Target variables of this project are the WPA and EPA.
+
+## Project status:
+We have completed the readme draft file and data collection and will continue with data cleaning as our next step. As mentioned before, we will remove null data, standardize the data format, and remove outliers, before proceeding into the next step.
+The timeline and progress of our project can be found [here](
 Usage: 
-
-The product will be used by NRL teams and analysts to optimize in-game strategies, evaluate player performance, and identify key plays using WPA/EPA metrics. This will support real-time decision-making, post-match analysis, and player selection.
-
-Support information: 
-Please contact anyone from our team if one needs help. 
-
+he dataset aims to calculate Win Probability Added (WPA) for each team and Expected Points Added (EPA) for each player during NRL games. This analysis will help assess how individual actions impact the likelihood of winning or scoring.
+Contacts:
+Ahmad Nasiruddin (z5442313@ad.unsw.edu.au)
+Belinda Wang (z5445872@ad.unsw.edu.au)
+Hye Jun Jee (z5428730@ad.unsw.edu.au)
+Lavan Indrajit (z5313058@ad.unsw.edu.au)
+If you are interested in contributing to the WPA and EPA analysis for NRL, You can share Your Insights, Provide Feedback, or Spread the Word: For any inquiries or to express your interest, please contact any of the team members listed above. We gratefully appreciate any support or contributions to our project
 Contributors: 
-Ahmad Nasiruddin (Data Scientist) Belinda Wang (Data Scientist) Hye Jun Jee (Data Scientist) Lavan Indrajit (Data Scientist). Others can get involved by utilizing the above descriptions too. 
-
+Ahmad Nasiruddin, Belinda Wang,, Hye Jun Jee, Lavan Indrajit.
