@@ -63,7 +63,7 @@ The timeline and progress of our project can be found [here](https://github.com/
 ## Usage: 
 The dataset aims to calculate Win Probability Added (WPA) for each team and Expected Points Added (EPA) for each player during NRL games. This analysis will help assess how individual actions impact the likelihood of winning or scoring.
 
-##Contacts:
+## Contacts:
 Ahmad Nasiruddin (z5442313@ad.unsw.edu.au)
 Belinda Wang (z5445872@ad.unsw.edu.au)
 Hye Jun Jee (z5428730@ad.unsw.edu.au)
