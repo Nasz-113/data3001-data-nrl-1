@@ -58,14 +58,17 @@ The Target variables of this project are the WPA and EPA.
 
 ## Project status:
 We have completed the readme draft file and data collection and will continue with data cleaning as our next step. As mentioned before, we will remove null data, standardize the data format, and remove outliers, before proceeding into the next step.
-The timeline and progress of our project can be found [here](
-Usage: 
-he dataset aims to calculate Win Probability Added (WPA) for each team and Expected Points Added (EPA) for each player during NRL games. This analysis will help assess how individual actions impact the likelihood of winning or scoring.
-Contacts:
+The timeline and progress of our project can be found [here](https://github.com/Nasz-113/data3001-data-nrl-1/blob/20b659f92d8469e82df94c839294b4e151d3da17/weeklyTasks.csv)
+
+## Usage: 
+The dataset aims to calculate Win Probability Added (WPA) for each team and Expected Points Added (EPA) for each player during NRL games. This analysis will help assess how individual actions impact the likelihood of winning or scoring.
+
+##Contacts:
 Ahmad Nasiruddin (z5442313@ad.unsw.edu.au)
 Belinda Wang (z5445872@ad.unsw.edu.au)
 Hye Jun Jee (z5428730@ad.unsw.edu.au)
 Lavan Indrajit (z5313058@ad.unsw.edu.au)
-If you are interested in contributing to the WPA and EPA analysis for NRL, You can share Your Insights, Provide Feedback, or Spread the Word: For any inquiries or to express your interest, please contact any of the team members listed above. We gratefully appreciate any support or contributions to our project
-Contributors: 
+
+## Contributors: 
 Ahmad Nasiruddin, Belinda Wang,, Hye Jun Jee, Lavan Indrajit.
+If you are interested in contributing to the WPA and EPA analysis for NRL, You can share Your Insights, Provide Feedback, or Spread the Word: For any inquiries or to express your interest, please contact any of the team members listed above. We gratefully appreciate any support or contributions to our project
