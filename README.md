@@ -64,5 +64,4 @@ The product will be used by NRL teams and analysts to optimize in-game strategie
 Support information: Please contact anyone from our team if one needs help. 
 
 Contributors: Contributors: Ahmad Nasiruddin (Data Scientist) Belinda Wang (Data Scientist) Hye Jun Jee (Data Scientist) Lavan Indrajit (Data Scientist). Others can get involved by utilizing the above descriptions too. 
-![image](https://github.com/user-attachments/assets/d924a8a1-f8d8-41e7-a0e2-9dd6045fb631)
 
