@@ -112,8 +112,6 @@ The dataset aims to calculate Win Probability Added (WPA) for each team and Expe
 ## Contacts:
 Ahmad Nasiruddin (z5442313@ad.unsw.edu.au)
 
-Belinda Wang (z5445872@ad.unsw.edu.au)
-
 Hye Jun Jee (z5428730@ad.unsw.edu.au)
 
 Lavan Indrajit (z5313058@ad.unsw.edu.au)
