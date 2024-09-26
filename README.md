@@ -46,6 +46,7 @@ Perform exploratory data analysis (EDA) which are univariate analysis using hist
 
 ### 5. Modelling
 Organize the data for modelling, split into training/testing sets, and use logistic regression to calculate WPA and EPA. Analyse the results to identify impactful plays. 
+Simple linear aggression models to the WPA, EPA calcuation are suggessted, and to remove the trend over time series, it could consider Error Correction Model in the context.
 
 
 ## Data description: 
