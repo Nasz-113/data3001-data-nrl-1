@@ -1,0 +1,10 @@
+# Create TeamAScore from 'Score'
+df['TeamAScore'] = df['Score']
+
+# Create TeamBScore from 'OppScore'
+df['TeamBScore'] = df['OppScore']
+
+# Create ScoreDifference as TeamAScore - TeamBScore
+df['ScoreDifference'] = df['TeamAScore'] - df['TeamBScore']
+
+
