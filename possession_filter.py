@@ -79,3 +79,23 @@ def get_players_possession(df_possession):
     return players_possession
 
 df_players_possession = get_players_possession(df_possession)
+
+#possession indicator 0 or 1
+df_possession['PossessionIndicator'] = df_possession['InPossessionClubId'].apply(lambda x: 1 if pd.notna(x) else 0)
+Possession_Indicator = df_possession['PossessionIndicator']
+
+#possession Time segmentation
+# Detect changes in possession
+df_possession['PreviousPossessionClubId'] = df_possession['InPossessionClubId'].shift(1)
+df_possession['PossessionSwitched'] = df_possession['InPossessionClubId'] != df_possession['PreviousPossessionClubId']
+
+# Create possession segments by detecting when possession switches
+df_possession['PossessionPhaseStart'] = df_possession['PossessionSwitched'].apply(lambda x: 1 if x else 0).cumsum()
+
+# possession duration = ending - starting time 
+df_possession['PossessionStartSecs'] = df_possession.groupby('PossessionPhaseStart')['ElapsedMins'].transform('first') * 60 + df_possession.groupby('PossessionPhaseStart')['ElapsedSecs'].transform('first')
+df_possession['PossessionEndSecs'] = df_possession.groupby('PossessionPhaseStart')['ElapsedMins'].transform('last') * 60 + df_possession.groupby('PossessionPhaseStart')['ElapsedSecs'].transform('last')
+df_possession['PossessionDuration'] = df_possession['PossessionEndSecs'] - df_possession['PossessionStartSecs']
+
+Possession_duration = df_possession['PossessionDuration']
+
