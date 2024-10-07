@@ -6,7 +6,7 @@ import numpy as np
 
 ## filtering out Posession variables-locational data normalized wrt to the club in possesion-**Posession
 #csv_path = 'path_to_"2021 Event Data.csv" from "UNSW 2021 Event Data.zip" '
-csv_path = '/Users/june/Downloads/24T3/data3001/2021 Event Data.csv'
+csv_path = 'your_path_to_2021 Event Data.csv'
 
 def Possession_filter(csv_path):
     df = pd.read_csv(csv_path, low_memory=False)
