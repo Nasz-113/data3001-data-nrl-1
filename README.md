@@ -122,3 +122,10 @@ Lavan Indrajit (z5313058@ad.unsw.edu.au)
 Ahmad Nasiruddin, Hye Jun Jee, Lavan Indrajit.
 
 If you are interested in contributing to the WPA and EPA analysis for NRL, You can share Your Insights, Provide Feedback, or Spread the Word: For any inquiries or to express your interest, please contact any of the team members listed above. We gratefully appreciate any support or contributions to our project
+
+
+## Ed's Marking
+Grade: 7/10
+Comments: Some background reading and motivation expected in the introduction, with in-text citations and please use a separate section to list all references. Data description should provide instruction in the context of the model you expect the user to use, and some connections to the model need to be mentioned. Usage and status can be more detailed, again, in light of the model you have in mind. Overall, a worthy attempt. Keep going!
+
+
