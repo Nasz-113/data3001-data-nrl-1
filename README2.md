@@ -48,7 +48,7 @@ Key Features:
 
 - Possession Status: Whether the team has possession during the play, which is crucial for both EPA (scoring potential) and WPA (winning potential).
 
-These features will serve as the input variables for the logistic regression model. The target variable for WPA will be the win probability (binary outcome: win/loss), and for EPA, it will be the expected points for each play. By using these game context features, the logistic regression model will learn how different situations and events influence the outcome, allowing us to map WPA values to players and EPA values to field positions.
+These features will serve as the input variables for the logistic regression model. The target variable for WPA will be the win probability (binary outcome: win/loss), and for EPA, it will be the expected points for each play. By using these game context features, the logistic regression model will learn how different situations and events influence the outcome, allowing the ability to map WPA values to players and EPA values to field positions.
 
 Usage:
 
@@ -58,7 +58,7 @@ For both WPA and EPA project, key features to be used as variables in the regres
 
 After logistic regression, the WPA for each event is calculated and assigned to the player responsible for the action. The average WPA for each player is then derived by taking the mean of their individual WPA contributions across multiple plays or games, providing a clear measure of how much each player contributes to the team's likelihood of winning.
 
-A similar analysis should be done with EPA for each field position zone, allowing us to see how specific field position changes (for example, moving the ball from one zone to another) influenced the team’s scoring potential.
+A similar analysis should be done with EPA for each field position zone, allowing the ability to see how specific field position changes (for example, moving the ball from one zone to another) influenced the team’s scoring potential.
 
 The 2021 dataset is intended to be used for training the logistic regression model, with testing on the 2020-2023 dataset. This way we ensure the model learns from a specific set of data but is robust enough to generalize well across multiple seasons, reflecting its ability to predict win probability (WPA) or expected points (EPA) over a broader range of real-world scenarios.
 
