@@ -26,7 +26,7 @@ The feature engineering done including the addition of the following columns: Ho
 
 Data Description:
 
-The dataset consists of approximately 4.6 million observations (rows), with each row representing a unique event or game state during an NRL match. These events could include possessions, tackles, passes, scoring attempts, and turnovers.
+The dataset consists of approximately 2 million observations (rows), with each row representing a unique event or game state during an NRL match. These events could include possessions, tackles, passes, scoring attempts, and turnovers.
 
 Each observation captures essential details such as the match ID, sequence ID, possession times, player actions, and physical attributes of players, among other metrics. The dataset covers every match in 2021, ensuring a robust amount of data for building predictive models.
 
