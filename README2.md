@@ -34,29 +34,21 @@ Number of observations:
 Each observation (row) will represent a game state at a given moment, typically captured when an event (e.g., score change, possession switch) occurs in the match. The number of observations will depend on the number of matches and the number of events in each match.
 The data product will consist of approximately 10,000 observations, each representing a unique event from NRL matches. Each row will include time-stamped data on specific plays, capturing ball movement dynamics and player attributes during key events (e.g., score changes, possession switches).
 
-Features:
+Key Features:
 
-Match ID: Identifies the specific match.
+- Field Position: Represents where the play occurred on the field. In the EPA model, field position is the key target variable used to calculate expected points changes. For WPA, it helps assess how different locations influence win probability.
 
-Sequence ID: Ensures events are in chronological order.
+- Event Type: The type of play (e.g., pass, tackle, try). In both models, event type determines the impact of an action on either expected points or win probability. Scoring plays like tries will increase these values, while turnovers will likely decrease them.
 
-Team A ID / Team B ID: Identifies the competing teams.
+- Score Difference: The current score gap between teams. For WPA, it contextualizes the importance of a play, especially late in the game. In EPA, it helps assess how game dynamics might influence scoring potential.
 
-Win/Loss column
+- Possession Time: Measures how long the team has controlled the ball before the event. Longer possession is usually linked to higher scoring chances and affects both WPA and EPA predictions.
 
-Event Name: Type of event (e.g., tackle, try, pass).
+- Elapsed Time: Reflects the time remaining in the game. Late-game events have a greater influence on WPA, while in EPA, it helps predict scoring chances during different phases of the match.
 
-Possession Time: Total and opponent's possession time.
+- Possession Status: Whether the team has possession during the play, which is crucial for both EPA (scoring potential) and WPA (winning potential).
 
-Physical Coordinates: XmPhysical and YmPhysical for field position.
-
-Score Tracking: Current and opponent's scores.
-
-Elapsed Game Time: Includes Elapsed Minutes, Elapsed Seconds, and Half.
-
-Field Position: Normalized XmPhysical and YmPhysical based on field zones.
-
-Game Context: Score differential and game clock information
+These features will serve as the input variables for the logistic regression model. The target variable for WPA will be the win probability (binary outcome: win/loss), and for EPA, it will be the expected points for each play. By using these game context features, the logistic regression model will learn how different situations and events influence the outcome, allowing us to map WPA values to players and EPA values to field positions.
 
 Usage:
 
