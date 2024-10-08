@@ -1,5 +1,6 @@
-NRL WPA & EPA CALCULATION
+# NRL WPA AND EPA CALCULATION
 
+## Project description:
 
 The project aims to create two key predictive models: Win Probability Added (WPA) and Expected Points Added (EPA). The WPA model aims to calculate the impact of each player on the team’s probability of winning, whilst the EPA model aims to calculate the impact of field position on the team’s likelihood of scoring. 
 WPA evaluates how individual game actions, such as scoring or conceding penalties, shift a team's probability of winning. EPA, on the other hand, measures how specific actions contribute to scoring potential, helping teams optimize high-leverage plays.
