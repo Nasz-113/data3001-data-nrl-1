@@ -2,22 +2,21 @@
 
 ## Project description:
 
-The project aims to create two key predictive models: Win Probability Added (WPA) and Expected Points Added (EPA). The WPA model aims to calculate the impact of each player on the team’s probability of winning, whilst the EPA model aims to calculate the impact of field position on the team’s likelihood of scoring. 
-WPA evaluates how individual game actions, such as scoring or conceding penalties, shift a team's probability of winning. EPA, on the other hand, measures how specific actions contribute to scoring potential, helping teams optimize high-leverage plays.
+This project aims to develop two key predictive models: Win Probability Added (WPA) and Expected Points Added (EPA). The WPA model calculates the impact of each player's actions on the team’s probability of winning, while the EPA model measures the impact of field position on the team’s likelihood of scoring.
 
-The EPA (Expected Points Added) model is important because it quantifies the value of field position in terms of scoring opportunities. By understanding how each field position affects the likelihood of scoring, teams can make more informed, data-driven decisions about play-calling, whether to kick, run, or pass. EPA also allows teams to evaluate the effectiveness of offensive and defensive plays, providing valuable insights into the overall efficiency of their strategy.
+WPA is crucial for identifying game-changing moments, such as when a player’s action significantly alters the win probability, helping coaches and teams adjust strategies during matches. The concept of Win Probability Added has been widely applied in other sports like American Football, where advanced models like the one described in Stern (1999) have led to strategic improvements by emphasizing critical moments in games. Similarly, EPA is essential for understanding scoring opportunities based on field position, which allows teams to make informed decisions on plays, such as whether to kick or run based on the likelihood of scoring (Swartz, 2022).
 
-The WPA (Win Probability Added) model helps to identify game-changing moments, where a player's actions significantly alter the course of the game, and assists in making strategic adjustments based on these insights. It also aids in identifying high-impact players, supporting better player development and team management decisions.
+Although WPA and EPA models have been applied in sports like American football, rugby league remains underexplored. This project aims to build upon existing research and introduce WPA and EPA models to NRL (National Rugby League), providing insights into player performance and in-game decision-making. As discussed in Swartz and Armitage's research (2007), rugby is a dynamic sport that could benefit from advanced analytics for team management and player evaluation.
 
-While WPA and EPA have been successfully applied in various sports such as American Football, a low amount of research has been conducted on expected points in the NRL. By modelling WPA and EPA for rugby league, we aim to build upon existing research and introduce a new analytical perspective to the sport. 
+References:
 
-Relevant work can be found in the following sources:
-https://www.rugbyleagueeyetest.com/2022/02/07/explainer-eye-test-expected-points-etxp-for-the-nrl/ 
+Stern, H.S. (1999). Measuring the success of the game’s big plays. Journal of the American Statistical Association, 94, 347-355.
 
-https://www.sfu.ca/~tswartz/papers/nrl.pdf 
+Swartz, T. (2022). Expected points in rugby league. Rugby League Eye Test, retrieved from link.
 
-Additionally, a very insightful podcast on optimising rugby performance is the one below with Rugby Legend Sam Tomkins:
-https://www.youtube.com/watch?v=xt6FuKarlEc 
+Swartz, T.B., & Armitage, R. (2007). Analyzing rugby league with statistical models. Journal of Quantitative Analysis in Sports, 3, 19-34.
+
+Relevant work can also be found on advanced EPA in rugby league (Swartz, 2022) and an insightful podcast featuring Rugby Legend Sam Tomkins discussing optimal performance strategies (YouTube, 2022).
 
 Workflow: 
 
