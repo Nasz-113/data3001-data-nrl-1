@@ -2,6 +2,8 @@ import pandas as pd
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
+from category_encoders import TargetEncoder
+from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder
 pd.set_option('display.max_columns',2000)
 pd.set_option('display.max_rows',2000)
 
@@ -111,8 +113,6 @@ nrl21.rename(columns={
 # Drop unnecessary columns after the merges
 nrl21.drop(columns=['PlayerClubId_InPossession','PlayerClubId_Opposition','PlayerId_InPossession', 'InPossessionPlayerId', 'PlayerId', 'OppositionId', 'ClubId', 'InPossessionClubId', 'PlayerClubId'], inplace=True)
 
-# FEATURE ENGINEERING
-
 # Create HomeScore, AwayScore, HomePossessionSecs, OppPossessionSecs
 nrl21['HomeScore'] = np.where(
     nrl21['HomeClubName'] == nrl21['ClubName'], 
@@ -139,6 +139,94 @@ nrl21['AwayPossessionSecs'] = np.where(
 nrl21.drop(columns=['ClubName', 'OppositionName', 
                     'Score', 'OppScore', 
                     'PossessionSecs', 'OppPossessionSecs'], inplace=True)
+
+# Create a 'Win' column
+final_scores = nrl21.groupby('MatchId').agg({
+    'HomeScore': 'last', 
+    'AwayScore': 'last'
+}).reset_index()
+final_scores.rename(columns={'HomeScore': 'HomeScore_Final', 'AwayScore': 'AwayScore_Final'}, inplace=True)
+nrl21 = nrl21.merge(final_scores, on='MatchId', how='left')
+nrl21['Win'] = np.where(
+    (nrl21['HomeScore_Final'] > nrl21['AwayScore_Final']) & (nrl21['InPossessionClubName'] == nrl21['HomeClubName']), 1, 0
+)
+nrl21['Win'] = np.where(
+    (nrl21['AwayScore_Final'] > nrl21['HomeScore_Final']) & (nrl21['InPossessionClubName'] == nrl21['AwayClubName']), 1, nrl21['Win']
+)
+nrl21['Win'] = np.where(
+    (nrl21['HomeScore_Final'] == nrl21['AwayScore_Final']), 0.5, nrl21['Win']
+)
+nrl21.drop(columns=['HomeScore_Final', 'AwayScore_Final'], inplace=True)
+
+# EXPLORATORY DATA ANALYSIS
+
+# Identify categorical and numerical columns
+cat_cols = nrl21.select_dtypes(include=['object']).columns
+num_cols = nrl21.select_dtypes(include=np.number).columns.tolist()
+
+print("Categorical:\n", cat_cols)
+print("Nominal:\n", num_cols)
+
+# Univariate Data Analysis
+# for col in cat_cols:
+#     plt.figure(figsize=(12, 6))
+#     sns.countplot(data=nrl21, x=col)
+#     plt.title(f'Count of {col}')
+#     plt.xticks(rotation=45)
+#     plt.show()
+
+nrl21[num_cols].describe()
+
+# for col in num_cols:
+#     plt.figure(figsize=(12, 6))
+#     sns.histplot(nrl21[col], bins=30, kde=True)
+#     plt.title(f'Distribution of {col}')
+#     plt.show()
+
+#     plt.figure(figsize=(12, 6))
+#     sns.boxplot(x=nrl21[col])
+#     plt.title(f'Box plot of {col}')
+#     plt.show()
+
+# Print rows where Half is equal to 4
+half_4_data = nrl21[nrl21['Half'] == 4]
+print(half_4_data)
+nrl21.drop(columns=['DurationSecs', 'DistanceMs'], inplace=True)
+
+# Bivariate Data Analysis
+
+# Identify categorical and numerical columns after adjustments
+cat_cols = nrl21.select_dtypes(include=['object']).columns
+num_cols = nrl21.select_dtypes(include=np.number).columns.tolist()
+
+# sns.countplot(data=nrl21, x='InPossessionClubName', hue='Win')
+# plt.title('InPossessionClub vs Win')
+# plt.xticks(rotation=45)
+# plt.show()
+# sns.countplot(data=nrl21, x='PlayerPositionName', hue='Win')
+# plt.title('PlayerPositionNam vs Win')
+# plt.xticks(rotation=45)
+# plt.show()
+
+# for col in ['TotalPossessionSecs', 'XmPhysical', 'YmPhysical']:
+#     plt.figure(figsize=(12, 6))
+#     sns.boxplot(data=nrl21, x='Win', y=col)
+#     plt.title(f'{col} vs Win')
+#     plt.show()
+
+# Multivariate Data Analysis
+
+# Calculate the correlation matrix
+correlation_matrix = nrl21[num_cols].corr()
+plt.figure(figsize=(12, 10))
+sns.heatmap(correlation_matrix, annot=True, fmt=".2f", cmap="coolwarm", square=True)
+plt.title('Correlation Heatmap')
+plt.show()
+
+sns.pairplot(nrl21, hue='Win', vars=num_cols)
+plt.show()
+
+# FEATURE ENGINEERING
 
 # Create ScoreDifference as 1 when the home club is in possession and 0 when the away club is in possession
 nrl21['HomeAwayIndicator'] = np.where(nrl21['InPossessionClubName'] == nrl21['HomeClubName'], 1, 0)
@@ -179,49 +267,88 @@ bins = [-25,-1, 25, 50, 75, 100, 125]
 labels = ['(-25)-(-1)','0-25', '26-50', '51-75', '76-100', '101-125']
 nrl21['XmPhysical_Binned'] = pd.cut(nrl21['XmPhysical'], bins=bins, labels=labels, right=True)
 
+# # Ensure there are no zero values in DurationSecs to avoid division errors
+# nrl21['DurationSecs'] = nrl21['DurationSecs'].replace(0, np.nan)
 
-final_scores = nrl21.groupby('MatchId').agg({
-    'HomeScore': 'last', 
-    'AwayScore': 'last'
-}).reset_index()
-final_scores.rename(columns={'HomeScore': 'HomeScore_Final', 'AwayScore': 'AwayScore_Final'}, inplace=True)
-nrl21 = nrl21.merge(final_scores, on='MatchId', how='left')
-nrl21['Win'] = np.where(
-    (nrl21['HomeScore_Final'] > nrl21['AwayScore_Final']) & (nrl21['InPossessionClubName'] == nrl21['HomeClubName']), 1, 0
-)
-nrl21['Win'] = np.where(
-    (nrl21['AwayScore_Final'] > nrl21['HomeScore_Final']) & (nrl21['InPossessionClubName'] == nrl21['AwayClubName']), 1, nrl21['Win']
-)
-nrl21['Win'] = np.where(
-    (nrl21['HomeScore_Final'] == nrl21['AwayScore_Final']), 0.5, nrl21['Win']
-)
-nrl21.drop(columns=['HomeScore_Final', 'AwayScore_Final'], inplace=True)
+# # Calculate BallSpeed as DistanceMs divided by DurationSecs
+# nrl21['BallSpeed'] = nrl21['DistanceMs'] / nrl21['DurationSecs']
+
+# # Handle any potential NaN values that arise from zero division
+# nrl21['BallSpeed'].fillna(0, inplace=True)
+# nrl21['DurationSecs'].fillna(0, inplace=True)
+
+# # Check the results
+# print(nrl21[['DistanceMs', 'DurationSecs', 'BallSpeed']].head(10))
+
 
 # CATEGORICAL VARIABLE
 
-# Identify categorical and numerical columns
-cat_cols = nrl21.select_dtypes(include=['object']).columns
-num_cols = nrl21.select_dtypes(include=np.number).columns.tolist()
-
-# Print categorical variables and their unique counts
-print("Categorical Variables and their unique counts:")
-for col in cat_cols:
-    print(f"{col}: {nrl21[col].nunique()} unique values")
-
 nrl21.drop(columns=['EventName'], inplace=True)
 
-# Print numerical variables and their unique counts
-print("\nNumerical Variables and their unique counts:")
-for col in num_cols:
-    print(f"{col}: {nrl21[col].nunique()} unique values")
+# Handling High Cardinality Features
 
-unique_weather_conditions = nrl21['WeatherConditionName'].unique()
-print("Unique Weather Conditions:")
-print(unique_weather_conditions)
+# Frequency Encoding for high cardinality features
+high_cardinality_cols = ['EventCode', 'PlayerName', 'InPossessionPlayerName']
+# Apply frequency encoding
+for col in high_cardinality_cols:
+    nrl21[col + '_FreqEnc'] = nrl21[col].map(nrl21[col].value_counts())
+# # Group Rare Categories into "Other"
+# threshold = 0.01 * len(nrl21)  # Define a threshold for grouping rare categories (1% of the data)
+# for col in high_cardinality_cols:
+#     freq = nrl21[col].value_counts()
+#     rare_labels = freq[freq < threshold].index  # Identify rare categories
+#     nrl21[col] = nrl21[col].apply(lambda x: 'Other' if x in rare_labels else x)
+# Apply Target Encoding using sklearn's TargetEncoder
+# Target column assumed to be 'Win'
+te = TargetEncoder(cols=high_cardinality_cols)
+# Perform target encoding on the selected columns
+nrl21_encoded = te.fit_transform(nrl21, nrl21['Win'])  # Apply on training data
+# Drop original high cardinality columns after encoding if not needed
+nrl21_encoded.drop(columns=high_cardinality_cols, inplace=True)
 
-half = nrl21['Half'].unique()
-print("Half:")
-print(half)
+# Define the order for ordinal encoding
+position_order = ['Rain', 'Showers', 'Fine']
+ordinal_columns = ['WeatherConditionName']
 
+# Initialize the ordinal encoder
+ordinal_encoder = OrdinalEncoder(categories=[position_order] * len(ordinal_columns))
 
-# nrl21.to_csv('testingdata.csv', index=False)
+# Apply ordinal encoding
+nrl21_encoded[ordinal_columns] = ordinal_encoder.fit_transform(nrl21_encoded[ordinal_columns])
+
+# print("Data after Ordinal Encoding:")
+# print(nrl21_encoded[ordinal_columns])
+
+# Initialize the OneHotEncoder
+onehot_encoder = OneHotEncoder(sparse_output=False, drop='first')  # drop='first' to avoid dummy variable trap
+
+# Fit and transform the desired columns
+onehot_encoded = onehot_encoder.fit_transform(nrl21_encoded[['InPossessionClubName', 'PlayerPositionName', 'InPossessionPlayerPosition', 'HomeClubName', 'AwayClubName']])
+
+# Create a DataFrame for the one-hot encoded data
+onehot_df = pd.DataFrame(onehot_encoded, columns=onehot_encoder.get_feature_names_out(['InPossessionClubName', 'PlayerPositionName', 'InPossessionPlayerPosition', 'HomeClubName', 'AwayClubName']))
+
+# Concatenate with the original DataFrame
+nrl21_encoded = pd.concat([nrl21_encoded.reset_index(drop=True), onehot_df.reset_index(drop=True)], axis=1)
+
+# Drop the original categorical columns
+nrl21_encoded.drop(columns=['InPossessionClubName', 'PlayerPositionName', 'InPossessionPlayerPosition', 'HomeClubName', 'AwayClubName'], inplace=True)
+
+# print("Data after One-Hot Encoding with OneHotEncoder:")
+# print(nrl21_encoded.head())
+
+# # Identify categorical and numerical columns
+# cat_cols = nrl21_encoded.select_dtypes(include=['object']).columns
+# num_cols = nrl21_encoded.select_dtypes(include=np.number).columns.tolist()
+
+# # Print categorical variables and their unique counts
+# print("Categorical Variables and their unique counts:")
+# for col in cat_cols:
+#     print(f"{col}: {nrl21_encoded[col].nunique()} unique values")
+
+# # Print numerical variables and their unique counts
+# print("\nNumerical Variables and their unique counts:")
+# for col in num_cols:
+#     print(f"{col}: {nrl21_encoded[col].nunique()} unique values")
+
+# nrl21_encoded.to_csv('testingdata.csv', index=False)
