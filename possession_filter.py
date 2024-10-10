@@ -33,8 +33,8 @@ df_possession = Possession_filter(csv_path)
 
 #filtered = Possession_filter(csv_path)
 #filtered.to_csv(csv_path, index=False)
-def get_overall_possession(df_possession):
-    # Group by MatchId and ClubId-each team, each match
+def get_overall_possession_with_features(df_possession):
+    # Group by MatchId and InPossessionClubId - each team, each match
     overall_possession = df_possession.groupby(['MatchId', 'InPossessionClubId']).agg(
         TotalPossessionTime=('PossessionSecs', 'sum'),
         TotalOpponentPossessionTime=('OppPossessionSecs', 'sum'),
@@ -44,16 +44,27 @@ def get_overall_possession(df_possession):
         AverageOppScore=('OppScore', 'mean'),
         PossessionCount=('PossessionSecs', 'count')
     ).reset_index()
-    #Match, club IDs int, while measured figures float
+
+    
+    #feature 1. posseiontime_diff
+    overall_possession['PossessionTime_Diff'] = overall_possession['TotalPossessionTime'] - overall_possession['TotalOpponentPossessionTime']
+    
+    #feature 2. posseiiontime_field position: total posssssion time * avg filed position gives the effect of controlling the ball in strategic field positions.
+    overall_possession['PossessionTime_FieldPosition'] = overall_possession['TotalPossessionTime'] * overall_possession['AverageFieldPositionX']
+    
+    # Match and club IDs as integers, measured figures as floats
     overall_possession['MatchId'] = overall_possession['MatchId'].astype(int)
     overall_possession['InPossessionClubId'] = overall_possession['InPossessionClubId'].astype(int)
-
-    float_cols = ['TotalPossessionTime', 'TotalOpponentPossessionTime', 'AverageFieldPositionX', 'AverageFieldPositionY', 'AverageScore', 'AverageOppScore', 'PossessionCount']
+    
+    float_cols = ['TotalPossessionTime', 'TotalOpponentPossessionTime', 'AverageFieldPositionX', 
+                  'AverageFieldPositionY', 'AverageScore', 'AverageOppScore', 'PossessionCount', 
+                  'PossessionTime_Diff', 'PossessionTime_FieldPosition']
     overall_possession[float_cols] = overall_possession[float_cols].astype(float)
-
+    
     return overall_possession
 
-df_overall_possession = get_overall_possession(df_possession)
+df_possession = Possession_filter(csv_path)
+df_overall_possession = get_overall_possession_with_features(df_possession)
 
 def get_players_possession(df_possession): 
     # Group by MatchId, InPossessionClubId, and InPossessionPlayerId-each player
