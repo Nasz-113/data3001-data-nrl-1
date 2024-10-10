@@ -57,6 +57,10 @@ nrl21['ClubId'] = clubid_filled
 nrl21['OppositionId'] = oppid_filled
 nrl21['InPossessionClubId'] = nrl21['InPossessionClubId'].bfill()
 nrl21['InPossessionPlayerId'] = nrl21['InPossessionPlayerId'].bfill()
+nrl21['Score'] = nrl21.groupby('MatchId')['Score'].transform(lambda x: x.bfill())
+nrl21['OppScore'] = nrl21.groupby('MatchId')['OppScore'].transform(lambda x: x.bfill())
+nrl21['Score'] = nrl21.groupby('MatchId')['Score'].transform(lambda x: x.ffill())
+nrl21['OppScore'] = nrl21.groupby('MatchId')['OppScore'].transform(lambda x: x.ffill())
 
 # Impute missing values with the value from 'InPossessionPlayerId'
 nrl21['PlayerId'] = nrl21['PlayerId'].fillna(nrl21['InPossessionPlayerId'])
@@ -66,8 +70,6 @@ nrl21['EventName'] = nrl21['EventName'].fillna("Field goal (2 pt)- OK")
 
 # Impute missing values with 0
 nrl21['Points'] = nrl21['Points'].fillna(0)
-nrl21['Score'] = nrl21['Score'].fillna(0)
-nrl21['OppScore'] = nrl21['OppScore'].fillna(0)
 nrl21['DurationSecs'] = nrl21['DurationSecs'].fillna(0)
 nrl21['DistanceMs'] = nrl21['DistanceMs'].fillna(0)
 nrl21['PossessionSecs'] = nrl21['PossessionSecs'].fillna(0)
@@ -134,7 +136,9 @@ nrl21['AwayPossessionSecs'] = np.where(
              nrl21['OppPossessionSecs'],0))
 
 # Drop unwanted columns
-nrl21.drop(columns=['ClubName', 'OppositionName', 'Score', 'OppScore', 'PossessionSecs', 'OppPossessionSecs'], inplace=True)
+nrl21.drop(columns=['ClubName', 'OppositionName', 
+                    'Score', 'OppScore', 
+                    'PossessionSecs', 'OppPossessionSecs'], inplace=True)
 
 # Create ScoreDifference as 1 when the home club is in possession and 0 when the away club is in possession
 nrl21['HomeAwayIndicator'] = np.where(nrl21['InPossessionClubName'] == nrl21['HomeClubName'], 1, 0)
@@ -191,10 +195,33 @@ nrl21['Win'] = np.where(
 nrl21['Win'] = np.where(
     (nrl21['HomeScore_Final'] == nrl21['AwayScore_Final']), 0.5, nrl21['Win']
 )
-# nrl21.drop(columns=['HomeScore_Final', 'AwayScore_Final'], inplace=True)
+nrl21.drop(columns=['HomeScore_Final', 'AwayScore_Final'], inplace=True)
 
-print(nrl21[['MatchId', 'InPossessionClubName', 'Win', 'HomeScore_Final', 'AwayScore_Final']].head(20))
+# CATEGORICAL VARIABLE
 
-print(nrl21.info())
+# Identify categorical and numerical columns
+cat_cols = nrl21.select_dtypes(include=['object']).columns
+num_cols = nrl21.select_dtypes(include=np.number).columns.tolist()
+
+# Print categorical variables and their unique counts
+print("Categorical Variables and their unique counts:")
+for col in cat_cols:
+    print(f"{col}: {nrl21[col].nunique()} unique values")
+
+nrl21.drop(columns=['EventName'], inplace=True)
+
+# Print numerical variables and their unique counts
+print("\nNumerical Variables and their unique counts:")
+for col in num_cols:
+    print(f"{col}: {nrl21[col].nunique()} unique values")
+
+unique_weather_conditions = nrl21['WeatherConditionName'].unique()
+print("Unique Weather Conditions:")
+print(unique_weather_conditions)
+
+half = nrl21['Half'].unique()
+print("Half:")
+print(half)
+
 
 # nrl21.to_csv('testingdata.csv', index=False)
