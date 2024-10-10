@@ -2,8 +2,10 @@ import pandas as pd
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
+from scipy import stats
 from category_encoders import TargetEncoder
 from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
 pd.set_option('display.max_columns',2000)
 pd.set_option('display.max_rows',2000)
 
@@ -175,7 +177,7 @@ print("Nominal:\n", num_cols)
 #     plt.xticks(rotation=45)
 #     plt.show()
 
-nrl21[num_cols].describe()
+# nrl21[num_cols].describe()
 
 # for col in num_cols:
 #     plt.figure(figsize=(12, 6))
@@ -188,9 +190,6 @@ nrl21[num_cols].describe()
 #     plt.title(f'Box plot of {col}')
 #     plt.show()
 
-# Print rows where Half is equal to 4
-half_4_data = nrl21[nrl21['Half'] == 4]
-print(half_4_data)
 nrl21.drop(columns=['DurationSecs', 'DistanceMs'], inplace=True)
 
 # Bivariate Data Analysis
@@ -217,14 +216,14 @@ num_cols = nrl21.select_dtypes(include=np.number).columns.tolist()
 # Multivariate Data Analysis
 
 # Calculate the correlation matrix
-correlation_matrix = nrl21[num_cols].corr()
-plt.figure(figsize=(12, 10))
-sns.heatmap(correlation_matrix, annot=True, fmt=".2f", cmap="coolwarm", square=True)
-plt.title('Correlation Heatmap')
-plt.show()
+# correlation_matrix = nrl21[num_cols].corr()
+# plt.figure(figsize=(12, 10))
+# sns.heatmap(correlation_matrix, annot=True, fmt=".2f", cmap="coolwarm", square=True)
+# plt.title('Correlation Heatmap')
+# plt.show()
 
-sns.pairplot(nrl21, hue='Win', vars=num_cols)
-plt.show()
+# sns.pairplot(nrl21, hue='Win', vars=num_cols)
+# plt.show()
 
 # FEATURE ENGINEERING
 
@@ -267,24 +266,6 @@ bins = [-25,-1, 25, 50, 75, 100, 125]
 labels = ['(-25)-(-1)','0-25', '26-50', '51-75', '76-100', '101-125']
 nrl21['XmPhysical_Binned'] = pd.cut(nrl21['XmPhysical'], bins=bins, labels=labels, right=True)
 
-# # Ensure there are no zero values in DurationSecs to avoid division errors
-# nrl21['DurationSecs'] = nrl21['DurationSecs'].replace(0, np.nan)
-
-# # Calculate BallSpeed as DistanceMs divided by DurationSecs
-# nrl21['BallSpeed'] = nrl21['DistanceMs'] / nrl21['DurationSecs']
-
-# # Handle any potential NaN values that arise from zero division
-# nrl21['BallSpeed'].fillna(0, inplace=True)
-# nrl21['DurationSecs'].fillna(0, inplace=True)
-
-# # Check the results
-# print(nrl21[['DistanceMs', 'DurationSecs', 'BallSpeed']].head(10))
-
-
-# CATEGORICAL VARIABLE
-
-nrl21.drop(columns=['EventName'], inplace=True)
-
 # Handling High Cardinality Features
 
 # Frequency Encoding for high cardinality features
@@ -292,12 +273,6 @@ high_cardinality_cols = ['EventCode', 'PlayerName', 'InPossessionPlayerName']
 # Apply frequency encoding
 for col in high_cardinality_cols:
     nrl21[col + '_FreqEnc'] = nrl21[col].map(nrl21[col].value_counts())
-# # Group Rare Categories into "Other"
-# threshold = 0.01 * len(nrl21)  # Define a threshold for grouping rare categories (1% of the data)
-# for col in high_cardinality_cols:
-#     freq = nrl21[col].value_counts()
-#     rare_labels = freq[freq < threshold].index  # Identify rare categories
-#     nrl21[col] = nrl21[col].apply(lambda x: 'Other' if x in rare_labels else x)
 # Apply Target Encoding using sklearn's TargetEncoder
 # Target column assumed to be 'Win'
 te = TargetEncoder(cols=high_cardinality_cols)
@@ -305,6 +280,10 @@ te = TargetEncoder(cols=high_cardinality_cols)
 nrl21_encoded = te.fit_transform(nrl21, nrl21['Win'])  # Apply on training data
 # Drop original high cardinality columns after encoding if not needed
 nrl21_encoded.drop(columns=high_cardinality_cols, inplace=True)
+
+# Categorical Feature Handling
+
+nrl21.drop(columns=['MatchId','SeqNumber','EventName'], inplace=True)
 
 # Define the order for ordinal encoding
 position_order = ['Rain', 'Showers', 'Fine']
@@ -315,9 +294,6 @@ ordinal_encoder = OrdinalEncoder(categories=[position_order] * len(ordinal_colum
 
 # Apply ordinal encoding
 nrl21_encoded[ordinal_columns] = ordinal_encoder.fit_transform(nrl21_encoded[ordinal_columns])
-
-# print("Data after Ordinal Encoding:")
-# print(nrl21_encoded[ordinal_columns])
 
 # Initialize the OneHotEncoder
 onehot_encoder = OneHotEncoder(sparse_output=False, drop='first')  # drop='first' to avoid dummy variable trap
@@ -334,21 +310,27 @@ nrl21_encoded = pd.concat([nrl21_encoded.reset_index(drop=True), onehot_df.reset
 # Drop the original categorical columns
 nrl21_encoded.drop(columns=['InPossessionClubName', 'PlayerPositionName', 'InPossessionPlayerPosition', 'HomeClubName', 'AwayClubName'], inplace=True)
 
-# print("Data after One-Hot Encoding with OneHotEncoder:")
-# print(nrl21_encoded.head())
+# Scaling & Normalization
 
-# # Identify categorical and numerical columns
-# cat_cols = nrl21_encoded.select_dtypes(include=['object']).columns
-# num_cols = nrl21_encoded.select_dtypes(include=np.number).columns.tolist()
+# Columns to scale based on univariate analysis
+num_cols_standardize = ['TotalPossessionSecs', 'XmPhysical', 'YmPhysical']
+num_cols_scale = ['Points', 'ElapsedMins', 'ElapsedSecs']
 
-# # Print categorical variables and their unique counts
-# print("Categorical Variables and their unique counts:")
-# for col in cat_cols:
-#     print(f"{col}: {nrl21_encoded[col].nunique()} unique values")
+# Initialize the StandardScaler and MinMaxScaler
+scaler = StandardScaler()
+min_max_scaler = MinMaxScaler()
 
-# # Print numerical variables and their unique counts
-# print("\nNumerical Variables and their unique counts:")
-# for col in num_cols:
-#     print(f"{col}: {nrl21_encoded[col].nunique()} unique values")
+# Apply StandardScaler to appropriate columns
+nrl21_standardized = pd.DataFrame(scaler.fit_transform(nrl21_encoded[num_cols_standardize]), columns=num_cols_standardize)
 
-# nrl21_encoded.to_csv('testingdata.csv', index=False)
+# Apply MinMaxScaler to appropriate columns
+nrl21_scaled = pd.DataFrame(min_max_scaler.fit_transform(nrl21_encoded[num_cols_scale]), columns=num_cols_scale)
+
+# Merge with original dataset (dropping the scaled/standardized columns first)
+nrl21_encoded = nrl21_encoded.drop(columns=num_cols_standardize + num_cols_scale)
+nrl21_encoded = pd.concat([nrl21_encoded, nrl21_standardized, nrl21_scaled], axis=1)
+
+z_scores = np.abs(stats.zscore(nrl21_encoded[num_cols]))
+nrl21_filtered = nrl21_encoded[(z_scores < 3).all(axis=1)]  # Removes outliers
+
+nrl21_filtered.to_csv('finaldata.csv', index=False)
