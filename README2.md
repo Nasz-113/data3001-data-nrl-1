@@ -8,6 +8,19 @@ WPA is crucial for identifying game-changing moments, such as when a player’s 
 
 Although WPA and EPA models have been applied in sports like American football, rugby league remains underexplored. This project aims to build upon existing research and introduce WPA and EPA models to NRL (National Rugby League), providing insights into player performance and in-game decision-making. As discussed in Swartz and Armitage's research (2007), rugby is a dynamic sport that could benefit from advanced analytics for team management and player evaluation.
 
+#Sources
+The dataset is composed of multiple CSV files, each capturing different aspects of the game and its participants. The key data sources included:
+
+Events.txt: Stores event reference data, listing all possible in-game events such as passes, tackles, or scores. Each event has a unique EventCode and EventName.
+
+Matches.txt: Contains match-level data including match timings, participating clubs, final scores, and venue information, using fields like MatchId, TeamAName, TeamBName, and WeatherCondition.
+
+Players.txt: Holds player reference data, including basic details like PlayerId, PlayerName, and physical attributes like height and weight.
+
+These files enabled detailed analysis of player performance, team dynamics, and match outcomes. The data was processed and cleaned to extract useful features for WPA and EPA modeling.
+
+However, a limitation of the data was that there were many missing values present. 
+
 Workflow: 
 
 The dataset was first sorted by MatchId and then by SeqNumber to ensure that the sequence of events within each match was properly ordered. Only significant columns were retained, such as MatchId, SeqNumber, ClubId, OppositionId, PlayerId, and key game event details like Elapsed Time, Possession Information, Event Information, and Scoring Data. Missing values were addressed using a combination of backward fill and forward fill, with any remaining missing values set to 0.
