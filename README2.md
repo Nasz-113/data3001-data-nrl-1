@@ -43,6 +43,11 @@ Usage:
 
 A logistic regression is intended to be modelled on the data for both the WPA and EPA models. This will be used to calculate the pre-play and post-play values for both WPA and EPA, with their respective final value being the difference between them. 
 
+Win Probability=1/(1+e^(-(β_0+β_1*X_1+β_2*X_2+⋯+β_n*X_n ) ) )  !
+
+[image](https://github.com/user-attachments/assets/312c8af0-f360-4a82-b245-1bbc518047f7)
+
+
 For both WPA and EPA project, key features to be used as variables in the regression include Score Difference, Possession Time, Event Type, and Remaining time. These features help the logistic regression model predict how a player’s action impacts the team’s win probability.
 
 After logistic regression, the WPA for each event is calculated and assigned to the player responsible for the action. The average WPA for each player is then derived by taking the mean of their individual WPA contributions across multiple plays or games, providing a clear measure of how much each player contributes to the team's likelihood of winning.
