@@ -8,16 +8,6 @@ WPA is crucial for identifying game-changing moments, such as when a player’s 
 
 Although WPA and EPA models have been applied in sports like American football, rugby league remains underexplored. This project aims to build upon existing research and introduce WPA and EPA models to NRL (National Rugby League), providing insights into player performance and in-game decision-making. As discussed in Swartz and Armitage's research (2007), rugby is a dynamic sport that could benefit from advanced analytics for team management and player evaluation.
 
-References:
-
-Stern, H.S. (1999). Measuring the success of the game’s big plays. Journal of the American Statistical Association, 94, 347-355.
-
-Swartz, T. (2022). Expected points in rugby league. Rugby League Eye Test, retrieved from link.
-
-Swartz, T.B., & Armitage, R. (2007). Analyzing rugby league with statistical models. Journal of Quantitative Analysis in Sports, 3, 19-34.
-
-Relevant work can also be found on advanced EPA in rugby league (Swartz, 2022) and an insightful podcast featuring Rugby Legend Sam Tomkins discussing optimal performance strategies (YouTube, 2022).
-
 Workflow: 
 
 Null handling: removing the rows of data with null values Standardizing data format Removing outliers
@@ -72,3 +62,13 @@ Ahmad Nasiruddin, Hye Jun Jee, Lavan Indrajit.
 How can others get involved?
 
 If you are interested in contributing to the WPA and EPA analysis for NRL, You can share Your Insights, Provide Feedback, or Spread the Word: For any inquiries or to express your interest, please contact any of the team members listed above. We gratefully appreciate any support or contributions to our project
+
+References:
+
+Stern, H.S. (1999). Measuring the success of the game’s big plays. Journal of the American Statistical Association, 94, 347-355.
+
+Swartz, T. (2022). Expected points in rugby league. Rugby League Eye Test, retrieved from link.
+
+Swartz, T.B., & Armitage, R. (2007). Analyzing rugby league with statistical models. Journal of Quantitative Analysis in Sports, 3, 19-34.
+
+Relevant work can also be found on advanced EPA in rugby league (Swartz, 2022) and an insightful podcast featuring Rugby Legend Sam Tomkins discussing optimal performance strategies (YouTube, 2022).
