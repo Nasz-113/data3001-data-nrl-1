@@ -27,11 +27,25 @@ The dataset was first sorted by MatchId and then by SeqNumber to ensure that the
 
 The dataset was standardized by changing the format of certain columns from float to integer, followed by merging relevant information from auxiliary files. This included merging ClubName, OppositionName, and InPossessionClubName from Players.csv, as well as PlayerName and PlayerPositionName from the same file. Additional details like WeatherConditionName, TeamAName, and TeamBName were merged from Matches.csv. Columns were then renamed for clarity, and new features such as HomeScore, AwayScore, HomePossessionSecs, and OppPossessionSecs were created. A win column was also generated to label match outcomes.
 
+Key events were also categorized as follows:
+
+Scoring Events: Events that directly affect the score and impact both WPA and EPA, such as tries (TRY), penalty tries (PTRY), conversions (CVOK), penalty goals (PGOK), and field goals (FGOK).
+
+Field Progression Events: These include actions like runs, kicks, and linebreaks, which help predict future scoring potential and affect EPA.
+
+Possession Changes: Events like turnovers, errors, and penalties, which shift possession and influence both WPA and EPA by changing the game momentum.
+
+Set Completions and Tackles: These represent team progress during a set, impacting field position and possession, crucial for EPA.
+
+Defensive and Kicking Events: Missed field goals, defensive plays, and pressure-inducing kicks that influence both WPA and EPA by affecting game flow.
+
 For Exploratory Data Analysis (EDA), univariate analysis was performed using count plots for categorical data and histograms for numerical data. Bivariate analysis involved comparing categorical and numerical data using count plots and boxplots, while multivariate analysis was conducted using heatmaps to examine relationships between numerical features.
 
 Several feature engineering steps were taken, including creating a HomeAwayIndicator, ScoreDifference, TimeRemaining, and event-specific indicators such as TryIndicator, ConversionIndicator, PenaltyIndicator, and FieldGoalIndicator. Additional features such as ConsecutiveEvent and binned XmPhysical values were also created. To handle high cardinality, frequency encoding and target encoding were applied, and categorical features were encoded using ordinal encoding for weather conditions and OneHotEncoding for other categorical data.
 
-For scaling and normalization, numerical features such as Points, ElapsedMins, and ElapsedSecs were scaled, while TotalPossessionSecs, XmPhysical, and YmPhysical were normalized. Finally, outliers were removed using the Z-score method to ensure that the dataset was prepared for modeling.
+For scaling and normalization, numerical features such as Points, ElapsedMins, and ElapsedSecs were scaled, while TotalPossessionSecs, XmPhysical, and YmPhysical were normalized. 
+
+Finally, outliers were removed using the Z-score method to ensure that the dataset was prepared for modeling.
 
 Using ball speed as a feature was initially appealing, however it was found that no rows where both duration secs and distance had values. 
 
