@@ -10,8 +10,17 @@ Although WPA and EPA models have been applied in sports like American football, 
 
 Workflow: 
 
-Null handling: removing the rows of data with null values Standardizing data format Removing outliers
-The feature engineering done including the addition of the following columns: HomeAway Indicator, Score Difference, Time Remaining, Possession Indicator, FieldGoalIndicator, ConversionIndicator.
+The dataset was first sorted by MatchId and then by SeqNumber to ensure that the sequence of events within each match was properly ordered. Only significant columns were retained, such as MatchId, SeqNumber, ClubId, OppositionId, PlayerId, and key game event details like Elapsed Time, Possession Information, Event Information, and Scoring Data. Missing values were addressed using a combination of backward fill and forward fill, with any remaining missing values set to 0.
+
+The dataset was standardized by changing the format of certain columns from float to integer, followed by merging relevant information from auxiliary files. This included merging ClubName, OppositionName, and InPossessionClubName from Players.csv, as well as PlayerName and PlayerPositionName from the same file. Additional details like WeatherConditionName, TeamAName, and TeamBName were merged from Matches.csv. Columns were then renamed for clarity, and new features such as HomeScore, AwayScore, HomePossessionSecs, and OppPossessionSecs were created. A win column was also generated to label match outcomes.
+
+For Exploratory Data Analysis (EDA), univariate analysis was performed using count plots for categorical data and histograms for numerical data. Bivariate analysis involved comparing categorical and numerical data using count plots and boxplots, while multivariate analysis was conducted using heatmaps to examine relationships between numerical features.
+
+Several feature engineering steps were taken, including creating a HomeAwayIndicator, ScoreDifference, TimeRemaining, and event-specific indicators such as TryIndicator, ConversionIndicator, PenaltyIndicator, and FieldGoalIndicator. Additional features such as ConsecutiveEvent and binned XmPhysical values were also created. To handle high cardinality, frequency encoding and target encoding were applied, and categorical features were encoded using ordinal encoding for weather conditions and OneHotEncoding for other categorical data.
+
+For scaling and normalization, numerical features such as Points, ElapsedMins, and ElapsedSecs were scaled, while TotalPossessionSecs, XmPhysical, and YmPhysical were normalized. Finally, outliers were removed using the Z-score method to ensure that the dataset was prepared for modeling.
+
+Using ball speed as a feature was initially appealing, however it was found that no rows where both duration secs and distance had values. 
 
 Data Description:
 
@@ -19,23 +28,9 @@ The dataset consists of approximately 2 million observations (rows), with each r
 
 Each observation captures essential details such as the match ID, sequence ID, possession times, player actions, and physical attributes of players, among other metrics. The dataset covers every match in 2021, ensuring a robust amount of data for building predictive models.
 
-Number of observations:
-Each observation (row) will represent a game state at a given moment, typically captured when an event (e.g., score change, possession switch) occurs in the match. The number of observations will depend on the number of matches and the number of events in each match.
-The data product will consist of approximately 10,000 observations, each representing a unique event from NRL matches. Each row will include time-stamped data on specific plays, capturing ball movement dynamics and player attributes during key events (e.g., score changes, possession switches).
+The dataset contains approximately 1 million rows and 100 columns, each representing an event during an NRL match (e.g., possession, tackle, pass, scoring attempt). It captures key details like Match ID, Player Actions, Possession Time, and Field Position, providing comprehensive data for building WPA and EPA models.
 
-Key Features:
-
-- Field Position: Represents where the play occurred on the field. In the EPA model, field position is the key target variable used to calculate expected points changes. For WPA, it helps assess how different locations influence win probability.
-
-- Event Type: The type of play (e.g., pass, tackle, try). In both models, event type determines the impact of an action on either expected points or win probability. Scoring plays like tries will increase these values, while turnovers will likely decrease them.
-
-- Score Difference: The current score gap between teams. For WPA, it contextualizes the importance of a play, especially late in the game. In EPA, it helps assess how game dynamics might influence scoring potential.
-
-- Possession Time: Measures how long the team has controlled the ball before the event. Longer possession is usually linked to higher scoring chances and affects both WPA and EPA predictions.
-
-- Elapsed Time: Reflects the time remaining in the game. Late-game events have a greater influence on WPA, while in EPA, it helps predict scoring chances during different phases of the match.
-
-- Possession Status: Whether the team has possession during the play, which is crucial for both EPA (scoring potential) and WPA (winning potential).
+Key features include Field Position (target for EPA), Event Type, Score Difference, Possession Time, Elapsed Time, and Possession Status. These features are inputs for the logistic regression models, with WPA predicting win probability (binary: win/loss) and EPA predicting expected points, enabling mapping to players and field positions.
 
 These features will serve as the input variables for the logistic regression model. The target variable for WPA will be the win probability (binary outcome: win/loss), and for EPA, it will be the expected points for each play. By using these game context features, the logistic regression model will learn how different situations and events influence the outcome, allowing the ability to map WPA values to players and EPA values to field positions.
 
@@ -50,8 +45,6 @@ Win Probability=1/(1+e^(-(β_0+β_1*X_1+β_2*X_2+⋯+β_n*X_n ) ) )
 Expected points=  1/(1+e^(-(α_0+α_1*X_1+α_2*X_2+⋯+α_n*X_n ) ) )  
 
 [image](https://github.com/user-attachments/assets/31ab7546-8fec-4470-af65-e44089faf112)
-
-
 
 For both WPA and EPA project, key features to be used as variables in the regression include Score Difference, Possession Time, Event Type, and Remaining time. These features help the logistic regression model predict how a player’s action impacts the team’s win probability.
 
