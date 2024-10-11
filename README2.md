@@ -8,7 +8,7 @@ WPA is crucial for identifying game-changing moments, such as when a player’s 
 
 Although WPA and EPA models have been applied in sports like American football, rugby league remains underexplored. This project aims to build upon existing research and introduce WPA and EPA models to NRL (National Rugby League), providing insights into player performance and in-game decision-making. As discussed in Swartz and Armitage's research (2007), rugby is a dynamic sport that could benefit from advanced analytics for team management and player evaluation.
 
-#Sources
+# Sources
 The dataset is composed of multiple CSV files, each capturing different aspects of the game and its participants. The key data sources included:
 
 Events.txt: Stores event reference data, listing all possible in-game events such as passes, tackles, or scores. Each event has a unique EventCode and EventName.
@@ -21,7 +21,7 @@ These files enabled detailed analysis of player performance, team dynamics, and 
 
 However, a limitation of the data was that there were many missing values present. 
 
-Workflow: 
+# Workflow: 
 
 The dataset was first sorted by MatchId and then by SeqNumber to ensure that the sequence of events within each match was properly ordered. Only significant columns were retained, such as MatchId, SeqNumber, ClubId, OppositionId, PlayerId, and key game event details like Elapsed Time, Possession Information, Event Information, and Scoring Data. Missing values were addressed using a combination of backward fill and forward fill, with any remaining missing values set to 0.
 
@@ -35,7 +35,7 @@ For scaling and normalization, numerical features such as Points, ElapsedMins, a
 
 Using ball speed as a feature was initially appealing, however it was found that no rows where both duration secs and distance had values. 
 
-Data Description:
+# Data Description:
 
 The dataset consists of approximately 2 million observations (rows), with each row representing a unique event or game state during an NRL match. These events could include possessions, tackles, passes, scoring attempts, and turnovers.
 
@@ -47,7 +47,7 @@ Key features include Field Position (target for EPA), Event Type, Score Differen
 
 These features will serve as the input variables for the logistic regression model. The target variable for WPA will be the win probability (binary outcome: win/loss), and for EPA, it will be the expected points for each play. By using these game context features, the logistic regression model will learn how different situations and events influence the outcome, allowing the ability to map WPA values to players and EPA values to field positions.
 
-Usage:
+# Usage:
 
 A logistic regression is intended to be modelled on the data for both the WPA and EPA models. This will be used to calculate the pre-play and post-play values for both WPA and EPA, with their respective final value being the difference between them. 
 
@@ -67,9 +67,9 @@ A similar analysis should be done with EPA for each field position zone, allowin
 
 The 2021 dataset is intended to be used for training the logistic regression model, with testing on the 2020-2023 dataset. This way we ensure the model learns from a specific set of data but is robust enough to generalize well across multiple seasons, reflecting its ability to predict win probability (WPA) or expected points (EPA) over a broader range of real-world scenarios.
 
-Support information: 
+# Support information: 
 
-Contributors: 
+# Contributors: 
 
 Who has contributed to this data product? 
 
@@ -79,7 +79,7 @@ How can others get involved?
 
 If you are interested in contributing to the WPA and EPA analysis for NRL, You can share Your Insights, Provide Feedback, or Spread the Word: For any inquiries or to express your interest, please contact any of the team members listed above. We gratefully appreciate any support or contributions to our project
 
-References:
+# References:
 
 Stern, H.S. (1999). Measuring the success of the game’s big plays. Journal of the American Statistical Association, 94, 347-355.
 
