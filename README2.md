@@ -68,6 +68,7 @@ A similar analysis should be done with EPA for each field position zone, allowin
 The 2021 dataset is intended to be used for training the logistic regression model, with testing on the 2020-2023 dataset. This way we ensure the model learns from a specific set of data but is robust enough to generalize well across multiple seasons, reflecting its ability to predict win probability (WPA) or expected points (EPA) over a broader range of real-world scenarios.
 
 # Support information: 
+Contact Lavan Indrajit, June Jee, and Ahmad Nasiruddin on Microsoft Teams
 
 # Contributors: 
 
