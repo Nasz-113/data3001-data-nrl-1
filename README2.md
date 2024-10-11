@@ -45,13 +45,14 @@ Several feature engineering steps were taken, including creating a HomeAwayIndic
 
 For scaling and normalization, numerical features such as Points, ElapsedMins, and ElapsedSecs were scaled, while TotalPossessionSecs, XmPhysical, and YmPhysical were normalized. 
 
-Finally, outliers were removed using the Z-score method to ensure that the dataset was prepared for modeling.
+Finally, outliers were removed using the Z-score method to ensure that the dataset was prepared for modeling. Rows with events that were insignificant, because they are not directly related to points or winning, were also removed.
+
 
 Using ball speed as a feature was initially appealing, however it was found that no rows where both duration secs and distance had values. 
 
 # Data Description:
 
-The dataset consists of approximately 2 million observations (rows), with each row representing a unique event or game state during an NRL match. These events could include possessions, tackles, passes, scoring attempts, and turnovers.
+The dataset consists of approximately 200 000 observations (rows), with each row representing a unique event or game state during an NRL match. These events could include possessions, tackles, passes, scoring attempts, and turnovers.
 
 Each observation captures essential details such as the match ID, sequence ID, possession times, player actions, and physical attributes of players, among other metrics. The dataset covers every match in 2021, ensuring a robust amount of data for building predictive models.
 
