@@ -74,6 +74,8 @@ Expected points=  1/(1+e^(-(α_0+α_1*X_1+α_2*X_2+⋯+α_n*X_n ) ) )
 
 [image](https://github.com/user-attachments/assets/31ab7546-8fec-4470-af65-e44089faf112)
 
+* where β & α represent the coefficients, and X_n represents game features
+
 For both WPA and EPA project, key features to be used as variables in the regression include Score Difference, Possession Time, Event Type, and Remaining time. These features help the logistic regression model predict how a player’s action impacts the team’s win probability.
 
 After logistic regression, the WPA for each event is calculated and assigned to the player responsible for the action. The average WPA for each player is then derived by taking the mean of their individual WPA contributions across multiple plays or games, providing a clear measure of how much each player contributes to the team's likelihood of winning.
